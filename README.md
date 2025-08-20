@@ -21,6 +21,13 @@ The Kolas.Ai API follows the OpenAPI 3.1 standard. To get started:
 4. **Make Predictions**: Send a POST request to `/predictions/predict` with your `projectId` and messages.
 5. **Receive Predictions**: Retrieve predicted categories and their probabilities in the API response.
 
+## Installation
+You can install the CleanTalk PHP client via Composer. Run the following command in your project directory:
+
+```bash
+composer require kolasai/clean-talk-php-client
+```
+
 ## Authentication
 
 This API uses **OAuth2 client credentials** for secure access. You’ll need to request a token using your client credentials from the Kolas.Ai platform.
