@@ -1,0 +1,28 @@
+{
+    "name": "kolasai/clean-talk-php-client",
+    "type": "library",
+    "description": "Official Clean Talk client for PHP applications.",
+    "keywords": ["ai", "kolasai", "classifier", "anti-spam", "anti-insult", "classification", "artificial intelligence", "clean talk"],
+    "license": "Apache-2.0",
+    "homepage": "https://kolas.ai/clean-talk/",
+    "authors": [{
+        "name": "kolas.ai",
+        "email": "info@kolas.ai",
+        "homepage": "https://kolas.ai/"
+    }],
+    "require": {
+        "php": ">=7.1",
+        "guzzlehttp/guzzle": "^6.0|^7.0",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4" : {
+            "CleanTalk\\" : "src/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
