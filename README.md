@@ -34,14 +34,25 @@ This API uses **OAuth2 client credentials** for secure access. You’ll need to 
 
 `$authResult` contains the access token and expires_in information, which you will use to authenticate your API requests. You need to update token after its expiration.
 
-### Example Request
+### Example for Sync Request
 Once you have your access token, you can make a request like this:
 
 ```php
     use CleanTalk\CleanTalkPredictionClient;
+    use CleanTalk\Message;
+    use CleanTalk\PredictRequest;
 
     $client = new CleanTalkPredictionClient($authResult->getAccessToken());
-    $response = $client->predict('a2277c92-1266-4817-ace5-cda4304858a5' ,'Hello world', YOUR_PROJECT_ID);
+
+    $response = $client->predict(
+        new PredictRequest(
+            YOUR_PROJECT_ID,
+            [
+                new Message('11177c92-1266-4817-ace5-cda430481111', 'Hello world!'),
+                new Message('22277c92-1266-4817-ace5-cda430482222', 'Good buy world!'),
+            ]
+        )
+    );
 
     foreach ($response->getPredictions() as $prediction) {
     echo "MessageId: {$prediction->getMessageId()}\n";
@@ -54,12 +65,38 @@ Once you have your access token, you can make a request like this:
 ### Example Response
 
 ```txt
-    MessageId: a2277c92-1266-4817-ace5-cda4304858a5
-    Message: Hello world
+    MessageId: 11177c92-1266-4817-ace5-cda430481111
+    Message: Hello world!
     Prediction: Neutral
-    Probability: 0.98436802625656
+    Probability: 0.029036153107882
+    Categories: Insult, Neutral, Spam
+    
+    MessageId: 22277c92-1266-4817-ace5-cda430482222
+    Message: Good buy world!
+    Prediction: Spam
+    Probability: 0.99374455213547
     Categories: Insult, Neutral, Spam
 ```
+
+### Example for Async Request
+Once you have your access token, you can make a request like this:
+
+```php
+    use CleanTalk\CleanTalkPredictionClient;
+    use CleanTalk\Message;
+    use CleanTalk\PredictRequest;
+
+    $client = new CleanTalkPredictionClient($authResult->getAccessToken());
+    $client->asyncPredict(new PredictRequest(
+        YOUR_PROJECT_ID,
+        [
+            new Message('11177c92-1266-4817-ace5-cda430481111', 'Hello world!'),
+            new Message('22277c92-1266-4817-ace5-cda430482222', 'Good buy world!'),
+        ]
+    ));
+```
+
+Responses will be sent to the configured webhook URL in your project settings.
 
 ## Documentation Links
 - [Kolas.Ai OpenAPI schema](https://github.com/kolasai/public-openapi): Explore our OpenAPI specification.
