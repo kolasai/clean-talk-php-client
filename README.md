@@ -29,7 +29,7 @@ This API uses **OAuth2 client credentials** for secure access. You’ll need to 
     use CleanTalk\KolasAiOAuthClient;
 
     $oauthClient = new KolasAiOAuthClient();
-    $authResult = $oauthClient->auth(YOUR_CLIENT_ID, YOUR_CLEINT_SECRET);
+    $authResult = $oauthClient->auth(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET);
 ```
 
 `$authResult` contains the access token and expires_in information, which you will use to authenticate your API requests. You need to update token after its expiration.
