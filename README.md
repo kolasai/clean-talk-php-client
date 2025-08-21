@@ -7,7 +7,7 @@ Welcome to the **Kolas.Ai Public API** documentation! This repository hosts the 
 Clean Talk API is designed to classify message categories based on a trained dataset within a configured project. Use this API to accurately categorize messages into types like "Neutral", "Insult", "Spam" , etc. We support different languages, including English, Russian, Ukrainian, and we can add any languages by request (message to info@kolas.ai).
 
 ### Key Features
-- **Predict Message Categories**: Use the `/predictions/predict` endpoint to sync classify messages based on your project-specific datasets.
+- **Predict Message Categories**: Use the `/predictions/predict` endpoint to sync classify messages based on your project-specific datasets and `/predictions/asyncPredict` endpoint to async classify messages.
 - **High Accuracy**: Predictions include probability scores, giving you confidence in the classification results.
 - **OAuth2 Authentication**: Secure access via OAuth2 client credentials flow.
 
@@ -18,7 +18,7 @@ The Kolas.Ai API follows the OpenAPI 3.1 standard. To get started:
 1. Create a new account on the [Kolas.Ai platform](https://app.kolas.ai/register).
 2. Create a new project [Clean Talk](https://app.kolas.ai/projects/create) and configure your datasets.
 3. **Authentication**: Obtain an access token using OAuth2 client credentials.
-4. **Make Predictions**: Send a POST request to `/predictions/predict` with your `projectId` and messages.
+4. **Make Predictions**: Send a POST request to `/predictions/predict` (or `/predictions/asyncPredict`) with your `projectId` and messages.
 5. **Receive Predictions**: Retrieve predicted categories and their probabilities in the API response.
 
 ## Installation
@@ -33,10 +33,10 @@ composer require kolasai/clean-talk-php-client
 This API uses **OAuth2 client credentials** for secure access. You’ll need to request a token using your client credentials from the Kolas.Ai platform.
 
 ```php
-    use CleanTalk\KolasAiOAuthClient;
+use CleanTalk\KolasAiOAuthClient;
 
-    $oauthClient = new KolasAiOAuthClient();
-    $authResult = $oauthClient->auth(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET);
+$oauthClient = new KolasAiOAuthClient();
+$authResult = $oauthClient->auth(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET);
 ```
 
 `$authResult` contains the access token and expires_in information, which you will use to authenticate your API requests. You need to update token after its expiration.
@@ -45,62 +45,62 @@ This API uses **OAuth2 client credentials** for secure access. You’ll need to 
 Once you have your access token, you can make a request like this:
 
 ```php
-    use CleanTalk\CleanTalkPredictionClient;
-    use CleanTalk\Message;
-    use CleanTalk\PredictRequest;
+use CleanTalk\CleanTalkPredictionClient;
+use CleanTalk\Message;
+use CleanTalk\PredictRequest;
 
-    $client = new CleanTalkPredictionClient($authResult->getAccessToken());
+$client = new CleanTalkPredictionClient($authResult->getAccessToken());
 
-    $response = $client->predict(
-        new PredictRequest(
-            YOUR_PROJECT_ID,
-            [
-                new Message('11177c92-1266-4817-ace5-cda430481111', 'Hello world!'),
-                new Message('22277c92-1266-4817-ace5-cda430482222', 'Good buy world!'),
-            ]
-        )
-    );
+$response = $client->predict(
+    new PredictRequest(
+        YOUR_PROJECT_ID,
+        [
+            new Message('11177c92-1266-4817-ace5-cda430481111', 'Hello world!'),
+            new Message('22277c92-1266-4817-ace5-cda430482222', 'Good buy world!'),
+        ]
+    )
+);
 
-    foreach ($response->getPredictions() as $prediction) {
-    echo "MessageId: {$prediction->getMessageId()}\n";
-    echo "Message: {$prediction->getMessage()}\n";
-    echo "Prediction: {$prediction->getPrediction()}\n";
-    echo "Probability: {$prediction->getProbability()}\n";
-    echo "Categories: " . implode(', ', $prediction->getCategories()) . "\n";
+foreach ($response->getPredictions() as $prediction) {
+echo "MessageId: {$prediction->getMessageId()}\n";
+echo "Message: {$prediction->getMessage()}\n";
+echo "Prediction: {$prediction->getPrediction()}\n";
+echo "Probability: {$prediction->getProbability()}\n";
+echo "Categories: " . implode(', ', $prediction->getCategories()) . "\n";
 ```
 
 ### Example Response
 
 ```txt
-    MessageId: 11177c92-1266-4817-ace5-cda430481111
-    Message: Hello world!
-    Prediction: Neutral
-    Probability: 0.029036153107882
-    Categories: Insult, Neutral, Spam
-    
-    MessageId: 22277c92-1266-4817-ace5-cda430482222
-    Message: Good buy world!
-    Prediction: Neutral
-    Probability: 0.99374455213547
-    Categories: Insult, Neutral, Spam
+MessageId: 11177c92-1266-4817-ace5-cda430481111
+Message: Hello world!
+Prediction: Neutral
+Probability: 0.9036153107882
+Categories: Insult, Neutral, Spam
+
+MessageId: 22277c92-1266-4817-ace5-cda430482222
+Message: Good buy world!
+Prediction: Neutral
+Probability: 0.99374455213547
+Categories: Insult, Neutral, Spam
 ```
 
 ### Example for Async Request
 Once you have your access token, you can make a request like this:
 
 ```php
-    use CleanTalk\CleanTalkPredictionClient;
-    use CleanTalk\Message;
-    use CleanTalk\PredictRequest;
+use CleanTalk\CleanTalkPredictionClient;
+use CleanTalk\Message;
+use CleanTalk\PredictRequest;
 
-    $client = new CleanTalkPredictionClient($authResult->getAccessToken());
-    $client->asyncPredict(new PredictRequest(
-        YOUR_PROJECT_ID,
-        [
-            new Message('11177c92-1266-4817-ace5-cda430481111', 'Hello world!'),
-            new Message('22277c92-1266-4817-ace5-cda430482222', 'Good buy world!'),
-        ]
-    ));
+$client = new CleanTalkPredictionClient($authResult->getAccessToken());
+$client->asyncPredict(new PredictRequest(
+    YOUR_PROJECT_ID,
+    [
+        new Message('11177c92-1266-4817-ace5-cda430481111', 'Hello world!'),
+        new Message('22277c92-1266-4817-ace5-cda430482222', 'Good buy world!'),
+    ]
+));
 ```
 
 Responses will be sent to the configured webhook URL in your project settings.
