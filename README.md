@@ -80,7 +80,7 @@ Once you have your access token, you can make a request like this:
     
     MessageId: 22277c92-1266-4817-ace5-cda430482222
     Message: Good buy world!
-    Prediction: Spam
+    Prediction: Neutral
     Probability: 0.99374455213547
     Categories: Insult, Neutral, Spam
 ```
