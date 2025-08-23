@@ -46,8 +46,8 @@ Once you have your access token, you can make a request like this:
 
 ```php
 use CleanTalk\CleanTalkPredictionClient;
-use CleanTalk\Message;
-use CleanTalk\PredictRequest;
+use CleanTalk\Request\Message;
+use CleanTalk\Request\PredictRequest;
 
 $client = new CleanTalkPredictionClient($authResult->getAccessToken());
 
@@ -90,8 +90,8 @@ Once you have your access token, you can make a request like this:
 
 ```php
 use CleanTalk\CleanTalkPredictionClient;
-use CleanTalk\Message;
-use CleanTalk\PredictRequest;
+use CleanTalk\Request\Message;
+use CleanTalk\Request\PredictRequest;
 
 $client = new CleanTalkPredictionClient($authResult->getAccessToken());
 $client->asyncPredict(new PredictRequest(

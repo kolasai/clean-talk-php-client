@@ -1,6 +1,6 @@
 <?php
 
-namespace CleanTalk;
+namespace CleanTalk\Response;
 
 use CleanTalk\Exception\CleanTalkException;
 
@@ -17,7 +17,10 @@ class PredictResponse
     public static function fromArray(array $data): self
     {
         $self = new self();
-        if (isset($data['predictions']) && is_array($data['predictions'])) {
+        if (isset($data['predictions'])) {
+            if (!is_array($data['predictions'])) {
+                throw new CleanTalkException('Predictions must be an array');
+            }
             foreach ($data['predictions'] as $item) {
                 $self->predictions[] = PredictionResult::fromArray($item);
             }

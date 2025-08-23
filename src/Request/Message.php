@@ -1,10 +1,11 @@
 <?php
 
-namespace CleanTalk;
+namespace CleanTalk\Request;
 
 use CleanTalk\Exception\CleanTalkException;
+use JsonSerializable;
 
-class Message
+class Message implements JsonSerializable
 {
     /**
      * @var string
@@ -34,13 +35,14 @@ class Message
         $this->text = $text;
     }
 
-    public function getMessageId(): string
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize(): array
     {
-        return $this->messageId;
-    }
-
-    public function getText(): string
-    {
-        return $this->text;
+        return [
+            'messageId' => $this->messageId,
+            'message' => $this->text,
+        ];
     }
 }

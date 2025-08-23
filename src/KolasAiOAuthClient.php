@@ -3,9 +3,9 @@
 namespace CleanTalk;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
 use CleanTalk\Exception\CleanTalkException;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\RequestExceptionInterface;
 
 class KolasAiOAuthClient
 {
@@ -19,10 +19,7 @@ class KolasAiOAuthClient
 
     public function __construct()
     {
-        $this->httpClient = new Client([
-            'base_uri' => self::BASE_URL,
-            'timeout' => 10.0,
-        ]);
+        $this->httpClient = new Client(['base_uri' => self::BASE_URL]);
     }
 
     /**
@@ -34,7 +31,7 @@ class KolasAiOAuthClient
     public function auth(string $clientId, string $clientSecret): AuthResult
     {
         try {
-            $response = $this->httpClient->post(self::AUTH_ENDPOINT, [
+            $response = $this->httpClient->request('POST', self::AUTH_ENDPOINT, [
                 'form_params' => [
                     'grant_type' => 'client_credentials',
                     'client_id' => $clientId,
@@ -42,16 +39,16 @@ class KolasAiOAuthClient
                 ],
                 'headers' => ['Accept' => 'application/json'],
             ]);
-
-            $data = json_decode($response->getBody()->getContents(), true);
-
-            if (empty($data['access_token'])) {
-                throw new CleanTalkException('OAuth2 authentication failed: ' . json_encode($data));
-            }
-
-            return AuthResult::fromArray($data);
-        } catch (RequestException|GuzzleException $e) {
+        } catch (RequestExceptionInterface|ClientExceptionInterface $e) {
             throw new CleanTalkException("Auth request failed.", 0, $e);
         }
+
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        if (empty($data['access_token'])) {
+            throw new CleanTalkException('OAuth2 authentication failed: ' . json_encode($data));
+        }
+
+        return AuthResult::fromArray($data);
     }
 }

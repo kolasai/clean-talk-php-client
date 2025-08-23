@@ -30,11 +30,11 @@ class AuthResult
             throw new CleanTalkException('Invalid data for AuthResult');
         }
 
-        $obj = new self();
-        $obj->accessToken = $data['access_token'];
-        $obj->tokenType = $data['token_type'];
-        $obj->expiresIn = $data['expires_in'];
-        return $obj;
+        $self = new self();
+        $self->accessToken = $data['access_token'];
+        $self->tokenType = $data['token_type'];
+        $self->expiresIn = $data['expires_in'];
+        return $self;
     }
 
     public function getAccessToken(): string

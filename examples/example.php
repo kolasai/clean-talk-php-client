@@ -2,14 +2,14 @@
 
 use CleanTalk\CleanTalkPredictionClient;
 use CleanTalk\KolasAiOAuthClient;
-use CleanTalk\Message;
-use CleanTalk\PredictRequest;
+use CleanTalk\Request\Message;
+use CleanTalk\Request\PredictRequest;
 
 require 'vendor/autoload.php';
 
-const YOUR_PROJECT_ID = '';
-const YOUR_CLIENT_ID = '';
-const YOUR_CLIENT_SECRET = '';
+const YOUR_PROJECT_ID = '11';
+const YOUR_CLIENT_ID = '4';
+const YOUR_CLIENT_SECRET = 'zYFtjzSv2JKvAE6cjojxuGyjcYsAi6Fxmiv4rrjF';
 
 $oauthClient = new KolasAiOAuthClient();
 $authResult = $oauthClient->auth(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET);

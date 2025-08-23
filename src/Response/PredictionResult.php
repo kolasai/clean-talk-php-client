@@ -1,6 +1,6 @@
 <?php
 
-namespace CleanTalk;
+namespace CleanTalk\Response;
 
 use CleanTalk\Exception\CleanTalkException;
 
@@ -43,13 +43,19 @@ class PredictionResult
         ) {
             throw new CleanTalkException('Invalid data for PredictionResult');
         }
-        $obj = new self();
-        $obj->messageId = $data['messageId'];
-        $obj->message = $data['message'];
-        $obj->categories = (array)$data['categories'];
-        $obj->prediction = $data['prediction'];
-        $obj->probability = (float)$data['probability'];
-        return $obj;
+
+        if (!is_numeric($data['probability'])) {
+            throw new CleanTalkException('Probability must be a numeric value');
+        }
+
+        $self = new self();
+        $self->messageId = $data['messageId'];
+        $self->message = $data['message'];
+        $self->categories = (array)$data['categories'];
+        $self->prediction = $data['prediction'];
+        $self->probability = (float)$data['probability'];
+
+        return $self;
     }
 
     public function getCategories(): array
